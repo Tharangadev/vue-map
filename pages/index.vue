@@ -15,7 +15,8 @@
         <el-col :span="3">
           <div class="drop_down">
             <el-dropdown>
-              <span class="el-dropdown-link">Listing Type
+              <span class="el-dropdown-link">
+                Listing Type
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
 
@@ -38,7 +39,8 @@
         <el-col :span="3">
           <div class="drop_down">
             <el-dropdown>
-              <span class="el-dropdown-link">Price Range
+              <span class="el-dropdown-link">
+                Price Range
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="price_range" size="small">
@@ -73,7 +75,8 @@
         <el-col :span="3">
           <div class="drop_down">
             <el-dropdown @command="no_beds">
-              <span class="el-dropdown-link">Number of beds
+              <span class="el-dropdown-link">
+                Number of beds
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="noofbeds">
@@ -91,7 +94,8 @@
         <el-col :span="3">
           <div class="drop_down">
             <el-dropdown @command="home_types">
-              <span class="el-dropdown-link">Home type
+              <span class="el-dropdown-link">
+                Home type
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="hometype">
@@ -119,8 +123,8 @@
           <h3 class="el-submenu__title">Real Estate1,628,348 results</h3>
         </el-row>
         <el-row>
-          <el-col :span="8" v-for="(o, index) in 30" :key="o" style="padding:10px;">
-            <card_layout></card_layout>
+          <el-col :span="8" v-for="(place,o) in places" :key="o" style="padding:10px;">
+            <card_layout :place_data="place"></card_layout>
           </el-col>
         </el-row>
       </div>
@@ -132,7 +136,10 @@ import Card_layout from '../components/card_layout'
 export default {
   name: 'index',
   components: { Card_layout },
-  middleware:'search',
+  middleware: 'search',
+  computed: {
+    places(){ return this.$store.getters.alllist}
+  },
   data() {
     return {
       //searchbox
@@ -140,7 +147,7 @@ export default {
       ///price range
       price_range: [250000, 350000],
       no_of_beds: '',
-      home_type:"",
+      home_type: '',
       listing_types: [
         {
           id: 1,
@@ -201,27 +208,25 @@ export default {
     no_beds(command) {
       this.no_of_beds = command
     },
-    home_types(command){
-      this.home_type=command
+    home_types(command) {
+      this.home_type = command
     },
-    apple(){
-       let tree=this.$refs.tree.getCheckedNodes()
-       let listings_type=tree.map((item)=>item.label)
-
-       let filter_data={
-          listings_type,
-          no_of_beds:this.no_of_beds,
-          home_type:this.home_type,
-          price_range:this.price_range,
-          search_term:this.search_term
-       }
-       console.log(filter_data)
+    apple() {
+      let tree = this.$refs.tree.getCheckedNodes()
+      let listings_type = tree.map(item => item.label)
+      let filter_data = {
+        listings_type,
+        no_of_beds: this.no_of_beds,
+        home_type: this.home_type,
+        price_range: this.price_range,
+        search_term: this.search_term
+      }
+      console.log(filter_data)
     }
   },
-  mounted:{
-    fetchinitial(){
-      
-    }
+  mounted() {
+    //initial data grab
+    this.$store.dispatch('get')
   }
 }
 </script>

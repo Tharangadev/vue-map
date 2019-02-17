@@ -4,15 +4,14 @@
       <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.xKlMLTCyF0sWc48xBApRMgHaEc%26pid%3D15.1&f=1" class="image">
       <div style="padding: 14px;">
         <h5>
-          method of buying
+         {{place_data.Forsale}}
         </h5>
         <div class="options">
-          <span>3 BDS.</span>
-          <span>1 BA</span>
-          <span>1000 sqft</span>
+          <span>{{place_data.beds}} BDS.</span>
+          <span>{{place_data.baths}}BA</span>
         </div>
         <div class="address">
-          201 NE , Southern way ,Seatle
+          {{place_data.Address}}
         </div>
       </div>
     </el-card>
@@ -21,7 +20,9 @@
 
 <script>
   export default {
-    name: 'card_layout'
+    name: 'card_layout',
+    props:['place_data'],
+
   }
 </script>
 
