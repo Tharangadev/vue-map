@@ -105,10 +105,11 @@
       </el-row>
     </div>
     <div class="map">
-      <div class="map_location"></div>
+      <Map_view :places="places"></Map_view>
+      
       <div class="details">
         <el-row>
-          <h3 class="el-submenu__title">Real Estate1,628,348 results</h3>
+          <h3 class="el-submenu__title">Real Estate <strong>{{list_size}}</strong> results</h3>
         </el-row>
         <el-row>
           <el-col :span="8" v-for="(place,o) in places" :key="o" style="padding:10px;">
@@ -121,14 +122,22 @@
 </template>
 <script>
 import Card_layout from '../components/card_layout'
+///leaflet libs
+import '../node_modules/leaflet/dist/leaflet.css'
+import '../node_modules/leaflet/dist/leaflet.js'
+///
+import Map_view from '../components/mapview'
 export default {
   name: 'index',
-  components: { Card_layout },
+  components: { Card_layout,Map_view},
   middleware: 'search',
   computed: {
     places() { return this.$store.getters.alllist },
-    loading(){ 
+    loading() {
       return this.$store.getters.loading
+    },
+    list_size() {
+      return this.$store.getters.list_size
     }
   },
   data() {
@@ -215,7 +224,7 @@ export default {
   mounted() {
     //initial data grab
     this.$store.dispatch('get')
-  }
+    }
 }
 
 </script>
@@ -269,15 +278,7 @@ export default {
   display: flex;
 }
 
-.map_location {
-  width: 50%;
-  height: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  background: yellow;
-  height: 100%;
-}
+
 
 .details {
   width: 50%;
@@ -293,10 +294,10 @@ export default {
   display: block;
   background: transparent;
   width: 64px;
-  height:64px;
+  height: 64px;
 }
-.loading_animation 
-{
+
+.loading_animation {
   width: 100%;
   height: 100%;
   background: #fffc;
