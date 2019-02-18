@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="loading_animation" v-if="loading">
+      <img src="../static/loader.gif" alt="" class="loading_gif">
+    </div>
     <div class="container_padding">
       <el-row class="search_bar row-bg" type="flex" align="center">
         <el-col :span="5">
@@ -19,17 +22,9 @@
                 Listing Type
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-
               <el-dropdown-menu slot="dropdown" size="small" class="list_types">
                 <span>
-                  <el-tree
-                    :data="listing_types"
-                    show-checkbox
-                    default-expand-all
-                    node-key="id"
-                    ref="tree"
-                    highlight-current
-                  ></el-tree>
+                  <el-tree :data="listing_types" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current></el-tree>
                 </span>
               </el-dropdown-menu>
             </el-dropdown>
@@ -58,13 +53,7 @@
                         </el-col>
                       </el-row>
                     </el-form-item>
-                    <el-slider
-                      v-model="price_range"
-                      range
-                      :step="50000"
-                      :min="100000"
-                      :max="500000"
-                    ></el-slider>
+                    <el-slider v-model="price_range" range :step="50000" :min="100000" :max="500000"></el-slider>
                   </el-form>
                 </span>
               </el-dropdown-menu>
@@ -115,7 +104,6 @@
         </el-col>
       </el-row>
     </div>
-
     <div class="map">
       <div class="map_location"></div>
       <div class="details">
@@ -138,7 +126,10 @@ export default {
   components: { Card_layout },
   middleware: 'search',
   computed: {
-    places(){ return this.$store.getters.alllist}
+    places() { return this.$store.getters.alllist },
+    loading(){ 
+      return this.$store.getters.loading
+    }
   },
   data() {
     return {
@@ -148,12 +139,10 @@ export default {
       price_range: [250000, 350000],
       no_of_beds: '',
       home_type: '',
-      listing_types: [
-        {
+      listing_types: [{
           id: 1,
           label: 'FOR SALE',
-          children: [
-            {
+          children: [{
               id: 4,
               label: 'By Agent'
             },
@@ -178,8 +167,7 @@ export default {
         {
           id: 2,
           label: 'Potential listing',
-          children: [
-            {
+          children: [{
               id: 66,
               label: 'Foreclosure'
             },
@@ -221,7 +209,7 @@ export default {
         price_range: this.price_range,
         search_term: this.search_term
       }
-      console.log(filter_data)
+      this.$store.dispatch('make_search', filter_data)
     }
   },
   mounted() {
@@ -229,6 +217,7 @@ export default {
     this.$store.dispatch('get')
   }
 }
+
 </script>
 <style lang="css" scoped>
 .search_bar {
@@ -243,27 +232,33 @@ export default {
   padding: 10px 5px;
   width: 100%;
 }
+
 .drop_menu_contain {
   padding: 20px;
   margin-top: 10px;
 }
+
 .el-dropdown-link,
 .el-dropdown {
   width: 100%;
   text-align: center;
 }
+
 .noofbeds {
   width: 150px;
   text-align: center;
 }
+
 .list_types {
   width: 250px;
   text-align: center;
 }
+
 .price_range {
   width: 300px;
   padding: 10px 20px;
 }
+
 .map {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -273,6 +268,7 @@ export default {
   width: 100%;
   display: flex;
 }
+
 .map_location {
   width: 50%;
   height: 100%;
@@ -282,9 +278,30 @@ export default {
   background: yellow;
   height: 100%;
 }
+
 .details {
   width: 50%;
   height: 100%;
   overflow-y: scroll;
 }
+
+.loading_gif {
+  position: fixed;
+  top: calc(50% - 32px);
+  left: calc(50% - 32px);
+  z-index: 1000;
+  display: block;
+  background: transparent;
+  width: 64px;
+  height:64px;
+}
+.loading_animation 
+{
+  width: 100%;
+  height: 100%;
+  background: #fffc;
+  position: absolute;
+  z-index: 990;
+}
+
 </style>
