@@ -5,45 +5,69 @@
 import { mapsettings } from '../settings/settings.js'
 export default {
   name: 'mapview',
+  props: ['places'],
   data() {
     return {
 
     }
   },
-  methods:{
-  	adding_places(){
-		var cities = L.layerGroup();
-		L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.').addTo(cities),
-		L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.').addTo(cities),
-		L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.').addTo(cities),
-		L.marker([39.77, -105.23]).bindPopup('This is Golden, CO.').addTo(cities);
-  	}
-  	
-  },
-  watch:{
+  methods: {
+    adding_places() {
+      this.places.forEach((single_place) => {
+        L.marker([single_place.lat, single_place.Lon]).bindPopup(`<el-card>
+<h4>
+		<span>${single_place.beds}</span><span>${single_place.baths}</span> 
+	</h4>
+	<div>
+		${single_place.Address} 
+	</div>
+</el-card>
+	
+ `).addTo(map)
+      })
+    }
 
+  },
+  computed: {
+    timeto_newmarkers() {
+      return this.$store.getters.loading
+    }
+  },
+  watch: {
+    timeto_newmarkers(old, newamount) {
+      if (newamount) {
+        this.adding_places()
+      }
+    }
   },
   mounted() {
-    // initial map loading
-    var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    // initial map loading 
+    var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGhhcmFuZ2FkZXYiLCJhIjoiY2pzYTZuODZuMG1mNzQ5cWRoZmIyeTY4NyJ9.TOGv-8DGsTMAblXO3Ajbzg', {
-      maxZoom: 18,
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      id: 'mapbox.streets'
-    }).addTo(mymap);
+    var streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
+
+    window.map = L.map('mapid', {
+      center: [33.1057, 106.211],
+      zoom: 5,
+      layers: streets
+    });
 
 
-    //marker
-    var marker = L.marker([51.5, -0.09]).addTo(mymap)
-    marker.bindPopup("<b>Hello world!</b><br>I am a popup.")
+
+
+    var baseLayers = {
+      "Streets": streets
+    };
+
   }
+
 }
 
 </script>
-<style lang="css" scoped>
+<style lang="css">
 .map_location {
   width: 50%;
   height: 100%;
@@ -52,5 +76,24 @@ export default {
   box-sizing: border-box;
   height: 100%;
 }
+
+.leaflet-popup-content-wrapper h4 
+{
+	display: fex;
+
+}
+
+.custom .leaflet-popup-tip,
+.custom .leaflet-popup-content-wrapper 
+{
+	border-radius: 0px;
+}
+.leaflet-popup-tip {
+  padding: 0px;
+  border-radius: 0px;
+  padding: 3px;
+}
+
+.pop_up {}
 
 </style>
