@@ -15,7 +15,11 @@ module.exports = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-
+ ////server middleware  
+  serverMiddleware: [  
+      { path: '/api/search', handler: '~/api/search.js' } ,
+      { path: '/api/filter', handler: '~/api/filter.js' } 
+  ],
   /*
   ** Customize the progress-bar color
   */

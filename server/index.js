@@ -1,10 +1,10 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-const router=require('./api')
+// const router=require('./api')
 
 const app = express()
-app.use(router)
+// app.use(router)
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
