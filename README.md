@@ -1,5 +1,4 @@
 ## Map Template using nuxt and leaflet
-# leaflet-maps
 
 ![GitHub Logo](/image.png)
 
