@@ -1,6 +1,7 @@
+## Map Template using nuxt and leaflet
 # leaflet-maps
 
-> My smashing Nuxt.js project
+![GitHub Logo](/image.png)
 
 ## Build Setup
 
